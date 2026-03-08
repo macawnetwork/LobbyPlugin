@@ -10,19 +10,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements CommandExecutor {
 
-    @Override
-    public void onEnable() {
-        getCommand("lobby").setExecutor(this);
-        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[MacawLobby] Plugin activado.");
-    }
+	@Override
+	public void onEnable() {
+		getCommand("lobby").setExecutor(this);
+		Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[MacawLobby] Plugin activado.");
+	}
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            player.sendMessage(ChatColor.GREEN + "Enviándote al lobby principal...");
-            player.performCommand("warp lobby");
-        }
-        return true;
-    }
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (sender instanceof Player) {
+			Player player = (Player) sender;
+			player.sendMessage(ChatColor.GREEN + "EnviC!ndote al lobby principal...");
+			player.performCommand("warp lobby");
+		}
+		return true;
+	}
 }
