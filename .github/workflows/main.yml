@@ -1,0 +1,38 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Manual Compile
+      run: |
+        # Creamos las carpetas de salida
+        mkdir -p target/classes
+        # Descargamos la librería de Spigot para que el código funcione
+        wget https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/1.20.1-R0.1-SNAPSHOT/spigot-api-1.20.1-R0.1-20230626.085527-77.jar -O spigot.jar
+        # Compilamos el archivo Main.java
+        javac -cp spigot.jar -d target/classes src/net/macaw/lobby/Main.java
+        # Metemos el plugin.yml dentro del paquete
+        cp plugin.yml target/classes/
+        # Creamos el archivo .JAR final
+        cd target/classes && jar cvf ../../MacawLobby.jar *
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MacawLobby-Plugin
+        path: MacawLobby.jar
