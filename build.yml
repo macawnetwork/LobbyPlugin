@@ -1,0 +1,31 @@
+name: Generar Plugin Macaw
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Compilar y Empaquetar
+        run: |
+          mkdir -p out/net/macaw/lobby
+          # Descargamos la herramienta necesaria (Spigot API)
+          wget https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/1.20.1-R0.1-SNAPSHOT/spigot-api-1.20.1-R0.1-20230626.085527-77.jar -O spigot.jar
+          # Convertimos el Main.java en un archivo que el server entienda
+          javac -cp spigot.jar -d out src/net/macaw/lobby/Main.java
+          # Metemos el plugin.yml que ya creaste
+          cp plugin.yml out/
+          # Creamos el archivo final .jar
+          cd out && jar cvf ../MacawLobby.jar *
+
+      - name: Descargar Resultado
+        uses: actions/upload-artifact@v4
+        with:
+          name: MacawLobby-Final
+          path: MacawLobby.jar
